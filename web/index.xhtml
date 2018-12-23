@@ -1,12 +1,52 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
     <h:head>
-        <title>Facelet Title</title>
+        <title>Library</title>
+        <style>
+            .Bimage{background-image: url("resources/images/book1.jpg");}
+        </style>
     </h:head>
-    <h:body>
-        Hello from Facelets
+    <h:body styleClass="Bimage">
+
+        <h:form>
+            <h:commandButton value="Admin books"></h:commandButton>
+            <h:commandButton value="Admin Authors"></h:commandButton>
+            <h:commandButton value="Admin Clients"></h:commandButton>
+        </h:form>
+        <br/>
+
+        <h:graphicImage library="images" name="book1.jpg" width="400"/>
+        <br/>
+        
+        <h:form>
+            <h:commandButton value="All books" action="toBooks"></h:commandButton>
+            <h:commandButton value="Authors" action="toAuthors"></h:commandButton>
+            <h:commandButton value="Clients"></h:commandButton>
+        </h:form>
+        <h:form>
+            <h:dataTable id="bookTable" value="#{listing.books}" style="border-style: ridge; border-color: #6699ff; font-family: cursive" 
+                         var="book" rendered="false">
+                <h:column>
+                    <f:facet name="header">Author</f:facet>
+                    #{book.title}
+                </h:column>        
+                 <h:column>
+                    <f:facet name="header">Title</f:facet>
+                    #{book.author}
+                </h:column>
+                 <h:column>
+                    <f:facet name="header">Client</f:facet>
+                    #{book.client}
+
+                </h:column>
+            </h:dataTable> <br/>
+        </h:form>
+  
     </h:body>
 </html>
 

@@ -95,6 +95,11 @@ public class Book  implements java.io.Serializable {
         this.taken = taken;
     }
 
+    @Override
+    public String toString() {
+        return title;
+    }
+
 
 
 
