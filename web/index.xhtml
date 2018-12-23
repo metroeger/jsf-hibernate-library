@@ -14,9 +14,9 @@
     <h:body styleClass="Bimage">
 
         <h:form>
-            <h:commandButton value="Admin books"></h:commandButton>
-            <h:commandButton value="Admin Authors"></h:commandButton>
-            <h:commandButton value="Admin Clients"></h:commandButton>
+            <h:commandButton value="Admin books" action="toAdminBooks"></h:commandButton>
+            <h:commandButton value="Admin Authors" action="toAdminAuthors"></h:commandButton>
+            <h:commandButton value="Admin Clients" action="toAdminClients"></h:commandButton>
         </h:form>
         <br/>
 
@@ -26,26 +26,9 @@
         <h:form>
             <h:commandButton value="All books" action="toBooks"></h:commandButton>
             <h:commandButton value="Authors" action="toAuthors"></h:commandButton>
-            <h:commandButton value="Clients"></h:commandButton>
+            <h:commandButton value="Clients" action="toClients"></h:commandButton>
         </h:form>
-        <h:form>
-            <h:dataTable id="bookTable" value="#{listing.books}" style="border-style: ridge; border-color: #6699ff; font-family: cursive" 
-                         var="book" rendered="false">
-                <h:column>
-                    <f:facet name="header">Author</f:facet>
-                    #{book.title}
-                </h:column>        
-                 <h:column>
-                    <f:facet name="header">Title</f:facet>
-                    #{book.author}
-                </h:column>
-                 <h:column>
-                    <f:facet name="header">Client</f:facet>
-                    #{book.client}
-
-                </h:column>
-            </h:dataTable> <br/>
-        </h:form>
+      
   
     </h:body>
 </html>

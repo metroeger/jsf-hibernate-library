@@ -13,6 +13,22 @@
             <from-outcome>toAuthors</from-outcome>
             <to-view-id>/authors.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>toAdminAuthors</from-outcome>
+            <to-view-id>/adminAuthors.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>toAdminClients</from-outcome>
+            <to-view-id>/adminClients.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>toAdminBooks</from-outcome>
+            <to-view-id>/adminBooks.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>toClients</from-outcome>
+            <to-view-id>/clients.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/books.xhtml</from-view-id>
@@ -25,6 +41,34 @@
         <from-view-id>/authors.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>authorsToIndex</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/adminAuthors.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>backAdminAtoIndex</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/adminBooks.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>backAdminBtoIndex</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/adminClients.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>backAdminCtoIndex</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/clients.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>clientsToIndex</from-outcome>
             <to-view-id>/index.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>

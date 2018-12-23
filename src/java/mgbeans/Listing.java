@@ -43,25 +43,7 @@ public class Listing {
         clients = session.createQuery("FROM Client").list();
         session.close();
     }
-    
-    public void authorsM(){
-        for (Author a : authors){
-            authorMap.put(a.getId(), a);
-        }
-    }
-    
-    public void showBooksOfAuthor(Author a){
-       (authorMap.get(a.getId())).getBooks();
-    }
-    
-     public void showAvailableBooksOfAuthor(){
-        
-    }
-    
-    public void showBooksOfClient(){
-        
-    }
-    
+   
     public void showAvailableBooks(){
        available.clear();
        for (Book b : books){
@@ -69,22 +51,6 @@ public class Listing {
                available.add(b);
            }
        }
-    }
-    
-     public void deleteAuthor(Author a) {
-//        city=null;
-//        findCity();
-        Session session;
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
-            session.delete(a);
-            session.getTransaction().commit();
-            //cityList(c.getCountry());
-            session.close();
-        } catch (HibernateException ex) {
-            ex.printStackTrace();
-        }
     }
 
     public List<Book> getBooks() {

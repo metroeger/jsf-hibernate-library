@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+                    <style>
+            .Bimage{background-image: url("resources/images/book1.jpg"); }
+        </style>
+    </h:head>
+    <h:body styleClass="Bimage">
+        
+         <h:graphicImage library="images" name="book1.jpg" width="400"/>
+         <br/>
+         
+         <h:form>
+             NEW AUTHOR:<br/>
+             Author name:<h:inputText value="#{authors.author.name}"></h:inputText>
+             <h:commandButton value="Add author" action="#{authors.addAuthor(authors.author)}"/>
+         </h:form>
+         
+         <h:form>
+            
+             <h:dataTable value="#{authors.authors}" style="border-style: ridge; border-color: #6699ff; font-family: cursive" 
+                         var="author">
+                <h:column>
+                    <f:facet name="header">Id</f:facet>
+                    #{author.id}
+                </h:column>        
+                 <h:column>
+                    <f:facet name="header">Name</f:facet>
+                    #{author.name}
+                </h:column>
+                   <h:column>
+                    <h:commandButton value = "Delete author" style="color: #6666ff"
+                                     action = "#{authors.deleteAuthor(author)}" />
+                </h:column>
+             
+            </h:dataTable> <br/>
+            
+            <!--            Show only available: <h:selectBooleanCheckbox binding="#{listing.showAvailableBooks()}"></h:selectBooleanCheckbox>-->
+
+         </h:form>
+    </h:body>
+</html>
+

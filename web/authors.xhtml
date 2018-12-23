@@ -5,9 +5,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Facelet Title</title>
-             <style>
-            .Bimage{background-image: url("resources/images/book1.jpg"); }
-        </style>
+          
     </h:head>
     <h:body styleClass="Bimage">
         
@@ -15,29 +13,7 @@
          <br/>
          
          <h:form>
-              Author name:<h:inputText></h:inputText>
-         </h:form>
-         
-         <h:form>
-            
-             <h:dataTable value="#{listing.authors}" style="border-style: ridge; border-color: #6699ff; font-family: cursive" 
-                         var="author">
-                <h:column>
-                    <f:facet name="header">Id</f:facet>
-                    #{author.id}
-                </h:column>        
-                 <h:column>
-                    <f:facet name="header">Name</f:facet>
-                    #{author.name}
-                </h:column>
-                   <h:column>
-                    <h:commandButton value = "Delete author" style="color: #6666ff"
-                             action = "#{listing.deleteAuthor(author)}" />
-                </h:column>
-             
-            </h:dataTable> <br/>
-            
-            <!--            Show only available: <h:selectBooleanCheckbox binding="#{listing.showAvailableBooks()}"></h:selectBooleanCheckbox>-->
+           
 
          </h:form>
     </h:body>
