@@ -65,7 +65,7 @@ public class Client implements java.io.Serializable {
         this.email = email;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "client")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
     public Set<Book> getBooks() {
         return this.books;
     }

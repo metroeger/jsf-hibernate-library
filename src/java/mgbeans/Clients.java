@@ -6,6 +6,7 @@
 package mgbeans;
 
 import hibernate.HibernateUtil;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,38 +27,42 @@ import pojos.Client;
 @RequestScoped
 public class Clients {
 
-      private Client client = new Client();
+    private Client client;
     private List<Client> clients;
-    private Map<Integer, Client> clientMap = new HashMap<>();
+    private Map<String, Client> clientMap;
     private List<Book> books;
+    private String choosenClient;
+    private List<Author> authors;
 
     public Clients() {
         Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
-//        books = session.createQuery("FROM Book").list();
-//        available = session.createQuery("FROM Book").list();
         clients = session.createQuery("FROM Client").list();
-//        clients = session.createQuery("FROM Client").list();
+        authors = session.createQuery("FROM Author").list(); 
         session.close();
-    }
-
-    public void mapClients() {
+        
+        clientMap = new HashMap<>();
         for (Client c : clients) {
-            clientMap.put(c.getId(), c);
+            clientMap.put(c.getName(), c);
         }
     }
-    
+  
     public void refresh(){
        Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
        clients = session.createQuery("FROM Client").list(); 
     }
-
-    public void booksListOfClient(Client c) {
-        Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
-        Query q = session.createQuery("FROM Book WHERE Client= :par1");
-        q.setParameter("par1", client);
-        books = q.list();
-        session.close();
+    
+    public void choose(){
+      client = clientMap.get(choosenClient);
+      books = new ArrayList<>(client.getBooks());
     }
+
+//    public void booksListOfClient(Client c) {       
+//        Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
+//        Query q = session.createQuery("FROM Book WHERE Client= :par1");
+//        q.setParameter("par1", client);
+//        books = q.list();
+//        session.close();
+//    }
 
     public void addClient(Client c) {
         Session session;
@@ -121,11 +126,11 @@ public class Clients {
         this.clients = clients;
     }
 
-    public Map<Integer, Client> getClientMap() {
+    public Map<String, Client> getClientMap() {
         return clientMap;
     }
 
-    public void setClientMap(Map<Integer, Client> clientMap) {
+    public void setClientMap(Map<String, Client> clientMap) {
         this.clientMap = clientMap;
     }
 
@@ -135,6 +140,22 @@ public class Clients {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    public String getChoosenClient() {
+        return choosenClient;
+    }
+
+    public void setChoosenClient(String choosenClient) {
+        this.choosenClient = choosenClient;
+    }
+
+    public List<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
     }
     
 }
