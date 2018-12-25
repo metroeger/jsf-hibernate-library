@@ -50,12 +50,24 @@
             <from-outcome>backAdminAtoIndex</from-outcome>
             <to-view-id>/index.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>editAuthor</from-outcome>
+            <to-view-id>/editAuthor.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/adminBooks.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>backAdminBtoIndex</from-outcome>
             <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>editBook</from-outcome>
+            <to-view-id>/editBook.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>newBook</from-outcome>
+            <to-view-id>/newBook.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
@@ -70,6 +82,27 @@
         <navigation-case>
             <from-outcome>clientsToIndex</from-outcome>
             <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/editBook.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>editBookToAdmin</from-outcome>
+            <to-view-id>/adminBooks.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/newBook.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>newBookToAdmin</from-outcome>
+            <to-view-id>/adminBooks.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/editAuthor.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>editAuthorToAdmin</from-outcome>
+            <to-view-id>/adminAuthors.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>

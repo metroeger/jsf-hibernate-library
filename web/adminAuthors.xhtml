@@ -4,43 +4,57 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-                    <style>
+        <style>
             .Bimage{background-image: url("resources/images/book1.jpg"); }
         </style>
     </h:head>
     <h:body styleClass="Bimage">
-        
-         <h:graphicImage library="images" name="book1.jpg" width="400"/>
-         <br/>
-         
-         <h:form>
-             NEW AUTHOR:<br/>
-             Author name:<h:inputText value="#{authors.author.name}"></h:inputText>
-             <h:commandButton value="Add author" action="#{authors.addAuthor(authors.author)}"/>
-         </h:form>
-         
-         <h:form>
-            
-             <h:dataTable value="#{authors.authors}" style="border-style: ridge; border-color: #6699ff; font-family: cursive" 
+
+        <h:graphicImage library="images" name="book1.jpg" width="400"/>
+        <br/>
+
+        <h:form>
+            NEW AUTHOR:<br/>
+            Author name:<h:inputText value="#{authors.newAuthor.name}"></h:inputText>
+            <h:commandButton value="Add author" action="#{authors.addAuthor()}"/>
+        </h:form><br/>
+
+        <h:form>
+            Search by name: <h:inputText id="authorName" value="#{authors.choosenAuthor}">
+                <f:ajax execute="authorName" render="author"
+                        event="keyup" listener="#{authors.searchAuthor()}" />
+            </h:inputText>
+            <h:outputText id="author" value="#{authors.author}"
+                          style="border-style: ridge; border-color: #6699ff; font-family: cursive" />
+        </h:form>
+
+        <h:form id="authorForm">
+            <h:dataTable id="authorTable" value="#{authors.authors}" style="border-style: ridge; border-color: #6699ff; font-family: cursive" 
                          var="author">
                 <h:column>
                     <f:facet name="header">Id</f:facet>
-                    #{author.id}
+                        #{author.id}
                 </h:column>        
-                 <h:column>
+                <h:column>
                     <f:facet name="header">Name</f:facet>
-                    #{author.name}
+                        #{author.name}
                 </h:column>
-                   <h:column>
-                    <h:commandButton value = "Delete author" style="color: #6666ff"
-                                     action = "#{authors.deleteAuthor(author)}" />
-                </h:column>
-             
-            </h:dataTable> <br/>
-            
-            <!--            Show only available: <h:selectBooleanCheckbox binding="#{listing.showAvailableBooks()}"></h:selectBooleanCheckbox>-->
+                <h:column>
+                    
+                    <h:commandButton value = "Edit author" style="color: #6666ff"
+                                     action = "#{authors.updateAuthor(author)}" />
+                    
+                    <h:commandButton id="remove" value = "Delete author" 
+                                     action = "#{authors.deleteAuthor(author)}" 
+                                     onclick="return confirm('Are you sure?')"
+                                     style="color: #6666ff">
+                        <f:ajax render="authorForm:authorTable"/>
+                    </h:commandButton>
+                </h:column> 
 
-         </h:form>
+            </h:dataTable> <br/>
+            <h:commandButton value="Back" action="backAdminAtoIndex"/>
+        </h:form>
     </h:body>
 </html>
 

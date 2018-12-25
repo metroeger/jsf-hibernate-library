@@ -6,12 +6,14 @@
 package mgbeans;
 
 import hibernate.HibernateUtil;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -24,8 +26,8 @@ import pojos.Client;
  * @author Agi
  */
 @ManagedBean
-@RequestScoped
-public class Clients {
+@SessionScoped
+public class Clients implements Serializable {
 
     private Client client;
     private List<Client> clients;
@@ -33,11 +35,12 @@ public class Clients {
     private List<Book> books;
     private String choosenClient;
     private List<Author> authors;
+    private Client newClient = new Client();
 
-    public Clients() {
+    public Clients () {
         Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
         clients = session.createQuery("FROM Client").list();
-        authors = session.createQuery("FROM Author").list(); 
+        authors = session.createQuery("FROM Author").list();
         session.close();
         
         clientMap = new HashMap<>();
@@ -49,9 +52,10 @@ public class Clients {
     public void refresh(){
        Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
        clients = session.createQuery("FROM Client").list(); 
+       session.close();
     }
     
-    public void choose(){
+    public void chooseClient(){
       client = clientMap.get(choosenClient);
       books = new ArrayList<>(client.getBooks());
     }
@@ -64,13 +68,13 @@ public class Clients {
 //        session.close();
 //    }
 
-    public void addClient(Client c) {
+    public void addClient() {
         Session session;
-        if (!c.getName().isEmpty()) {
+        if (!newClient.getName().isEmpty()) {
             try {
                 session = HibernateUtil.getSessionFactory().openSession();
                 session.beginTransaction();
-                session.save(c);
+                session.save(newClient);
                 session.getTransaction().commit();
                 refresh();
                 session.close();
@@ -78,9 +82,8 @@ public class Clients {
                 ex.printStackTrace();
                 System.out.println(ex);
             }
-        } else {
-            System.out.println("missing data");
-        }
+        } 
+        //newClient=null;
     }
 
     public void updateClient(Client c) {
@@ -97,9 +100,8 @@ public class Clients {
     }
 
     public void deleteClient(Client c) {
-        Session session;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             session.delete(c);
             session.getTransaction().commit();
@@ -107,7 +109,8 @@ public class Clients {
             session.close();
         } catch (HibernateException ex) {
             ex.printStackTrace();
-        }
+        }  
+        
     }
 
     public Client getClient() {
@@ -156,6 +159,14 @@ public class Clients {
 
     public void setAuthors(List<Author> authors) {
         this.authors = authors;
+    }
+
+    public Client getNewClient() {
+        return newClient;
+    }
+
+    public void setNewClient(Client newClient) {
+        this.newClient = newClient;
     }
     
 }

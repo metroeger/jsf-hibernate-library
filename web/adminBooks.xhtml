@@ -1,12 +1,43 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        Hello from Facelets
+        <h:form>
+
+            <h:dataTable value="#{listing.books}" style="border-style: ridge; border-color: #6699ff; font-family: cursive" 
+                         var="book">
+                <h:column>
+                    <f:facet name="header">Title</f:facet>
+                        #{book.title}
+                </h:column>        
+                <h:column>
+                    <f:facet name="header">Author</f:facet>
+                        #{book.author}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Client</f:facet>
+                        #{book.client}
+                </h:column>
+
+                <h:column>
+                    <h:commandButton value = "Edit book" style="color: #6666ff"
+                                     action = "#{listing.updateBook(book)}" />
+                    <h:commandButton value = "Delete book" style="color: #6666ff"
+                                     action = "#{listing.deleteBook(book)}" />
+                </h:column>  
+            </h:dataTable> <br/>
+
+
+        </h:form>
+        <h:form>
+            <h:commandButton value="New book" action="newBook"/>
+            <h:commandButton value="Back" action="backAdminBtoIndex"/>
+        </h:form>
     </h:body>
 </html>
 

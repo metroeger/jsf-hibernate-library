@@ -5,17 +5,39 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Facelet Title</title>
-          
+         <style>
+            .im{background-image: url("resources/images/library.jpg");}
+        </style>
     </h:head>
-    <h:body styleClass="Bimage">
-        
-         <h:graphicImage library="images" name="book1.jpg" width="400"/>
-         <br/>
-         
-         <h:form>
-           
+    <h:body styleClass="im">
+        <h:graphicImage library="images" name="jd-salinger.jpg" width="400"/>
+        <br/>
 
-         </h:form>
+        <h:form>
+            <h:selectOneMenu value="#{authors.choosenAuthor}">
+                <f:selectItems value="#{authors.authors}" />
+            </h:selectOneMenu>
+            <h:commandButton value="Choose" action="#{authors.chooseAuthor()}"/><br/>      
+        </h:form>
+        <h:form>
+            <h:dataTable value="#{authors.books}" style="border-style: ridge; border-color: #6699ff; font-family: cursive" 
+                         var="book" rendered="#{authors.author!=null}">
+                <h:column>
+                    <f:facet name="header">Book ID</f:facet>
+                        #{book.id}
+                </h:column>    
+                <h:column>
+                    <f:facet name="header">Title</f:facet>
+                        #{book.title}
+                </h:column>        
+                   <h:column>
+                    <f:facet name="header">Client</f:facet>
+                        #{book.client}
+                </h:column>  
+            </h:dataTable> <br/>
+
+            <h:commandLink value="Back" action="authorsToIndex"/>
+        </h:form>
     </h:body>
 </html>
 

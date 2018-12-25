@@ -16,7 +16,7 @@
 
         <h:form>
 
-            <h:dataTable value="#{listing.available}" style="border-style: ridge; border-color: #6699ff; font-family: cursive" 
+            <h:dataTable value="#{listing.books}" style="border-style: ridge; border-color: #6699ff; font-family: cursive" 
                          var="book">
                 <h:column>
                     <f:facet name="header">Title</f:facet>
@@ -29,11 +29,8 @@
                 <h:column>
                     <f:facet name="header">Client</f:facet>
                         #{book.client}
-
                 </h:column>
             </h:dataTable> <br/>
-
-<!--            Show only available: <h:selectBooleanCheckbox binding="#{listing.showAvailableBooks()}"></h:selectBooleanCheckbox>-->
 
             <h:commandLink value="Back" action="booksToIndex"></h:commandLink>
 

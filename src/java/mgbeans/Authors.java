@@ -7,101 +7,119 @@ package mgbeans;
 
 import hibernate.HibernateUtil;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import pojos.Author;
 import pojos.Book;
+import pojos.Client;
 
 /**
  *
  * @author Agi
  */
 @ManagedBean
-@RequestScoped
-public class Authors implements Serializable {
+@SessionScoped
+public class Authors implements Serializable{
 
-    private Author author = new Author();
+    private Author author;
     private List<Author> authors;
-    private Map<Integer, Author> authorMap = new HashMap<>();
     private List<Book> books;
+    private List<Client> clients;
+    private Map<String, Author> authorMap;
+    private String choosenAuthor;
+    private Author selected;
+    private Author newAuthor = new Author();
 
     public Authors() {
         Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
-//        books = session.createQuery("FROM Book").list();
-//        available = session.createQuery("FROM Book").list();
         authors = session.createQuery("FROM Author").list();
-//        clients = session.createQuery("FROM Client").list();
+        clients = session.createQuery("FROM Client").list();
         session.close();
-    }
 
-    public void mapAuthors() {
+        authorMap = new HashMap<>();
         for (Author a : authors) {
-            authorMap.put(a.getId(), a);
+            authorMap.put(a.getName(), a);
         }
     }
-    
-    public void refresh(){
-       Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
-       authors = session.createQuery("FROM Author").list(); 
-    }
 
-    public void booksListOfAuthor(Author a) {
+    public void refreshAuthors() {
         Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
-        Query q = session.createQuery("FROM Book WHERE Author= :par1");
-        q.setParameter("par1", author);
-        books = q.list();
+        authors = session.createQuery("FROM Author").list();
         session.close();
     }
 
-    public void addAuthor(Author a) {
-        Session session;
-        if (!a.getName().isEmpty()) {
+    public void chooseAuthor() {
+        try {
+            author = authorMap.get(choosenAuthor);
+            books = new ArrayList<>(author.getBooks());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void searchAuthor() {
+        for (Author a : authors) {
+            if (a.getName().toLowerCase().contains(choosenAuthor.toLowerCase())) {
+                author = a;
+            }
+        }
+    }
+
+    public void addAuthor() {
+        if (!newAuthor.getName().isEmpty()) {
             try {
-                session = HibernateUtil.getSessionFactory().openSession();
+                Session session = HibernateUtil.getSessionFactory().openSession();
                 session.beginTransaction();
-                session.save(a);
+                session.save(newAuthor);
                 session.getTransaction().commit();
-                refresh();
+                refreshAuthors();
                 session.close();
             } catch (HibernateException ex) {
                 ex.printStackTrace();
                 System.out.println(ex);
-
             }
         } else {
             System.out.println("missing data");
         }
     }
+    
+    public String updateAuthor(Author a){
+        selected = a;
+        return "editAuthor";
+    }
 
-    public void updateAuthor(Author a) {
-
-        Session session;
+    public String saveAuthor() {
+        
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            session.update(a);
+            session.update(selected);
             session.getTransaction().commit();
+            refreshAuthors();
             session.close();
         } catch (HibernateException ex) {
             ex.printStackTrace();
         }
+        return "editAuthorToAdmin";
     }
 
-    public void deleteAuthor(Author a) {
+ 
 
-        Session session;
+    public void deleteAuthor(Author a) {
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             session.delete(a);
             session.getTransaction().commit();
-            refresh();
+            refreshAuthors();
             session.close();
         } catch (HibernateException ex) {
             ex.printStackTrace();
@@ -124,11 +142,11 @@ public class Authors implements Serializable {
         this.authors = authors;
     }
 
-    public Map<Integer, Author> getAuthorMap() {
+    public Map<String, Author> getAuthorMap() {
         return authorMap;
     }
 
-    public void setAuthorMap(Map<Integer, Author> authorMap) {
+    public void setAuthorMap(Map<String, Author> authorMap) {
         this.authorMap = authorMap;
     }
 
@@ -138,6 +156,38 @@ public class Authors implements Serializable {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    public List<Client> getClients() {
+        return clients;
+    }
+
+    public void setClients(List<Client> clients) {
+        this.clients = clients;
+    }
+
+    public String getChoosenAuthor() {
+        return choosenAuthor;
+    }
+
+    public void setChoosenAuthor(String choosenAuthor) {
+        this.choosenAuthor = choosenAuthor;
+    }
+
+    public Author getNewAuthor() {
+        return newAuthor;
+    }
+
+    public void setNewAuthor(Author newAuthor) {
+        this.newAuthor = newAuthor;
+    }
+
+    public Author getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Author selected) {
+        this.selected = selected;
     }
 
 }

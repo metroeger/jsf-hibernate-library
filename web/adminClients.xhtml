@@ -9,9 +9,9 @@
     <h:body>
                   <h:form>
              NEW Client<br/>
-             Client name:<h:inputText value="#{clients.client.name}"></h:inputText>
-             Email:<h:inputText value="#{clients.client.email}"></h:inputText>
-             <h:commandButton value="Add client" action="#{clients.addClient(clients.client)}"/>
+             Client name:<h:inputText value="#{clients.newClient.name}"></h:inputText>
+             Email:<h:inputText value="#{clients.newClient.email}"></h:inputText>
+             <h:commandButton value="Add client" action="#{clients.addClient()}"/>
          </h:form>
          
          <h:form>

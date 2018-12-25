@@ -34,7 +34,8 @@ public class Author  implements java.io.Serializable {
        this.name = name;
        this.books = books;
     }
-   
+    
+  
      @Id @GeneratedValue(strategy=IDENTITY)
 
     
@@ -57,7 +58,7 @@ public class Author  implements java.io.Serializable {
         this.name = name;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="author")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="author")
     public Set<Book> getBooks() {
         return this.books;
     }
