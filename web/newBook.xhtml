@@ -12,10 +12,12 @@
                 <f:selectItems value="#{listing.authors}" />
             </h:selectOneMenu>
             <h:commandButton value="Choose" action="#{listing.chooseAuthor()}"/><br/> 
-
+            
+            
         </h:form>
         <h:form rendered="#{listing.author!=null}">
-            Book title <h:inputText value="#{listing.newBook.title}"></h:inputText>
+            Author: #{listing.author.name}<br/>
+            Book title: <h:inputText value="#{listing.newBook.title}"></h:inputText>
             <h:commandButton value="Save" action="#{listing.addBook()}"/>
             <h:commandButton value="Cancel" action="newBookToAdmin" immediate="true"/>
         </h:form>

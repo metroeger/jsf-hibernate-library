@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mgbeans;
 
 import hibernate.HibernateUtil;
@@ -14,6 +9,7 @@ import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import pojos.Author;
 import pojos.Book;
@@ -26,37 +22,27 @@ import pojos.User;
  */
 @ManagedBean
 @SessionScoped
-public class Listing implements Serializable{
+public class Listing implements Serializable {
 
     private List<Author> authors;
+    private Map<String, Author> authorMap;
     private List<Book> books;
     private List<Client> clients;
     private List<Book> available;
-    private Map<String, Client> clientMap;
-    private Map<String, Author> authorMap;
     private Map<Integer, Book> bookMap;
     private Author author;
     private Book book;
     private Client client;
-    private Author newAuthor = new Author();
-    private Client newClient = new Client();
-    private Book newBook = new Book();
+    private Book newBook;
     private Book choosenBook;
-    private Author cAuthor;
     private String choosenClient;
     private String choosenAuthor;
 
     public Listing() {
         Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
         books = session.createQuery("FROM Book").list();
-        authors = session.createQuery("FROM Author").list();
-        clients = session.createQuery("FROM Client").list();
         session.close();
 
-        authorMap = new HashMap<>();
-        for (Author a : authors) {
-            authorMap.put(a.getName(), a);
-        }
     }
 
     public void showAvailableBooks() {
@@ -73,10 +59,14 @@ public class Listing implements Serializable{
         books = session.createQuery("FROM Book").list();
         session.close();
     }
- 
+
     public void chooseAuthor() {
+
+        authorMap = new HashMap<>();
+        for (Author a : authors) {
+            authorMap.put(a.getName(), a);
+        }
         author = authorMap.get(choosenAuthor);
-        books = new ArrayList<>(author.getBooks());
     }
 
 //    public void booksListOfClient(Client c) {       
@@ -86,14 +76,26 @@ public class Listing implements Serializable{
 //        books = q.list();
 //        session.close();
 //    }
- 
+    public String newBook() {
+        newBook = new Book();
+        choosenAuthor = "";
+        Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
+        authors = session.createQuery("FROM Author").list();
+        session.close();
+        return "newBook";
+    }
 
     public String addBook() {
         newBook.setAuthor(author);
-        newBook.setClient(clients.get(1));
+
         if (!newBook.getTitle().isEmpty()) {
             try {
                 Session session = HibernateUtil.getSessionFactory().openSession();
+                Query q = session.createQuery("FROM Client WHERE id= :par1");
+                q.setParameter("par1", 1);
+                List list = q.list();
+                client = (Client) list.get(0);
+                newBook.setClient(client);
                 session.beginTransaction();
                 session.save(newBook);
                 session.getTransaction().commit();
@@ -104,37 +106,53 @@ public class Listing implements Serializable{
                 System.out.println(ex);
             }
         }
-        newBook=null;
+        newBook = null;
+        author = null;
         return "newBookToAdmin";
     }
 
     public void deleteBook(Book b) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
-        session.delete(b);
-        session.getTransaction().commit();
-        //refreshBooks();
-        session.close();
-        books.remove(b);
-        author.getBooks().remove(b);
+        try {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            session.delete(b);
+            session.getTransaction().commit();
+            refreshBooks();
+            session.close();
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+        }
+
     }
-    
-    public String updateBook(Book b){
+
+    public String updateBook(Book b) {      
         choosenBook = b;
+        Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
+        clients = session.createQuery("FROM Client").list();
+        session.close();
         return "editBook";
     }
 
-    public String saveBook(){
-         Session session = HibernateUtil.getSessionFactory().openSession();
-                session.beginTransaction();
-                session.update(choosenBook);
-                session.getTransaction().commit();
-                refreshBooks();
-                session.close();
-                
+    public void editBooksClient() {
+        for (Client c : clients) {
+            if (c.getName().equals(choosenClient)) {
+                choosenBook.setClient(c);
+            }
+        }
+    }
+
+    public String saveBook() {
+        editBooksClient();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.update(choosenBook);
+        session.getTransaction().commit();
+        session.close();
+        refreshBooks();
+
         return "editBookToAdmin";
     }
-    
+
     public List<Author> getAuthors() {
         return authors;
     }
@@ -165,22 +183,6 @@ public class Listing implements Serializable{
 
     public void setAvailable(List<Book> available) {
         this.available = available;
-    }
-
-    public Map<String, Client> getClientMap() {
-        return clientMap;
-    }
-
-    public void setClientMap(Map<String, Client> clientMap) {
-        this.clientMap = clientMap;
-    }
-
-    public Map<String, Author> getAuthorMap() {
-        return authorMap;
-    }
-
-    public void setAuthorMap(Map<String, Author> authorMap) {
-        this.authorMap = authorMap;
     }
 
     public Map<Integer, Book> getBookMap() {
@@ -237,22 +239,6 @@ public class Listing implements Serializable{
 
     public void setNewBook(Book newBook) {
         this.newBook = newBook;
-    }
-
-    public Author getNewAuthor() {
-        return newAuthor;
-    }
-
-    public void setNewAuthor(Author newAuthor) {
-        this.newAuthor = newAuthor;
-    }
-
-    public Client getNewClient() {
-        return newClient;
-    }
-
-    public void setNewClient(Client newClient) {
-        this.newClient = newClient;
     }
 
     public Book getChoosenBook() {

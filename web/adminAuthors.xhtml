@@ -9,14 +9,19 @@
         </style>
     </h:head>
     <h:body styleClass="Bimage">
+        
 
         <h:graphicImage library="images" name="book1.jpg" width="400"/>
         <br/>
-
         <h:form>
-            NEW AUTHOR:<br/>
+            <h:commandButton value = "New AUTHOR" style="color: #6666ff"
+                             action = "#{authors.newAuthor()}"/> 
+        </h:form>
+         
+        <h:form rendered="#{authors.newAuthor!=null}" >
             Author name:<h:inputText value="#{authors.newAuthor.name}"></h:inputText>
             <h:commandButton value="Add author" action="#{authors.addAuthor()}"/>
+            
         </h:form><br/>
 
         <h:form>

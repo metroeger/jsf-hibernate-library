@@ -65,10 +65,11 @@ public class Client implements java.io.Serializable {
         this.email = email;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
+    @OneToMany(fetch=FetchType.EAGER, mappedBy="client")
     public Set<Book> getBooks() {
         return this.books;
     }
+
 
     public void setBooks(Set<Book> books) {
         this.books = books;
@@ -76,7 +77,7 @@ public class Client implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return name;
+        return  name;
     }
 
 }

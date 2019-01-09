@@ -7,9 +7,9 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <h:form>
+        <h:form id="bookForm">
 
-            <h:dataTable value="#{listing.books}" style="border-style: ridge; border-color: #6699ff; font-family: cursive" 
+            <h:dataTable id="bookTable" value="#{listing.books}" style="border-style: ridge; border-color: #6699ff; font-family: cursive" 
                          var="book">
                 <h:column>
                     <f:facet name="header">Title</f:facet>
@@ -27,15 +27,18 @@
                 <h:column>
                     <h:commandButton value = "Edit book" style="color: #6666ff"
                                      action = "#{listing.updateBook(book)}" />
-                    <h:commandButton value = "Delete book" style="color: #6666ff"
-                                     action = "#{listing.deleteBook(book)}" />
+                    
+                    <h:commandButton id="remove" value = "Delete book" style="color: #6666ff"                                    
+                                     action = "#{listing.deleteBook(book)}"
+                                     onclick="return confirm('Delete?')">
+                        <f:ajax render="bookForm:bookTable"/>
+                    </h:commandButton>
                 </h:column>  
             </h:dataTable> <br/>
-
-
         </h:form>
+        
         <h:form>
-            <h:commandButton value="New book" action="newBook"/>
+            <h:commandButton value="New book" action="#{listing.newBook()}"/>
             <h:commandButton value="Back" action="backAdminBtoIndex"/>
         </h:form>
     </h:body>

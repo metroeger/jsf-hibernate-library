@@ -7,9 +7,14 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-                  <h:form>
-             NEW Client<br/>
-             Client name:<h:inputText value="#{clients.newClient.name}"></h:inputText>
+        
+         <h:form>
+            <h:commandButton value = "New Client" style="color: #6666ff"
+                            action = "#{clients.makeNew()}"/> 
+        </h:form>
+         
+        <h:form>
+             Client name:<h:inputText value="#{clients.newClient}"></h:inputText>
              Email:<h:inputText value="#{clients.newClient.email}"></h:inputText>
              <h:commandButton value="Add client" action="#{clients.addClient()}"/>
          </h:form>
@@ -31,8 +36,12 @@
                     #{client.email}
                 </h:column>
                    <h:column>
+                    <h:commandButton value = "Edit client" style="color: #6666ff"
+                                     action = "#{clients.updateClient(client)}"
+                                     rendered="#{client.id!=1}"/>
                     <h:commandButton value = "Delete client" style="color: #6666ff"
-                                     action = "#{clients.deleteClient(client)}" />
+                                     action = "#{clients.deleteClient(client)}" 
+                                     rendered="#{client.id!=1}"/>
                 </h:column>
              
             </h:dataTable> <br/>

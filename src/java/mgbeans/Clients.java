@@ -35,12 +35,12 @@ public class Clients implements Serializable {
     private List<Book> books;
     private String choosenClient;
     private List<Author> authors;
-    private Client newClient = new Client();
+    private Client newClient;
+    private Client selected;
 
     public Clients () {
         Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
         clients = session.createQuery("FROM Client").list();
-        authors = session.createQuery("FROM Author").list();
         session.close();
         
         clientMap = new HashMap<>();
@@ -68,6 +68,10 @@ public class Clients implements Serializable {
 //        session.close();
 //    }
 
+    public void makeNew(){
+        newClient=new Client();
+    }
+    
     public void addClient() {
         Session session;
         if (!newClient.getName().isEmpty()) {
@@ -78,26 +82,35 @@ public class Clients implements Serializable {
                 session.getTransaction().commit();
                 refresh();
                 session.close();
+                newClient=null;
             } catch (HibernateException ex) {
                 ex.printStackTrace();
                 System.out.println(ex);
             }
         } 
-        //newClient=null;
+        
     }
 
-    public void updateClient(Client c) {
-        Session session;
+    public String updateClient(Client c) {          
+        selected = c;
+        return "editClient";
+    }
+    
+      public String saveClient() {
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            session.update(c);
+            session.update(selected);
             session.getTransaction().commit();
+            refresh();
             session.close();
+            selected = null;
         } catch (HibernateException ex) {
             ex.printStackTrace();
         }
+        return "editClientToAdmin";
     }
+
 
     public void deleteClient(Client c) {
         try {
@@ -127,14 +140,6 @@ public class Clients implements Serializable {
 
     public void setClients(List<Client> clients) {
         this.clients = clients;
-    }
-
-    public Map<String, Client> getClientMap() {
-        return clientMap;
-    }
-
-    public void setClientMap(Map<String, Client> clientMap) {
-        this.clientMap = clientMap;
     }
 
     public List<Book> getBooks() {
@@ -168,5 +173,14 @@ public class Clients implements Serializable {
     public void setNewClient(Client newClient) {
         this.newClient = newClient;
     }
-    
+
+    public Client getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Client selected) {
+        this.selected = selected;
+    }
+
+  
 }

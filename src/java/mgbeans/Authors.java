@@ -27,7 +27,7 @@ import pojos.Client;
  */
 @ManagedBean
 @SessionScoped
-public class Authors implements Serializable{
+public class Authors implements Serializable {
 
     private Author author;
     private List<Author> authors;
@@ -36,12 +36,13 @@ public class Authors implements Serializable{
     private Map<String, Author> authorMap;
     private String choosenAuthor;
     private Author selected;
-    private Author newAuthor = new Author();
+    private Author newAuthor;
+    private boolean showNew;
 
     public Authors() {
         Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
         authors = session.createQuery("FROM Author").list();
-        clients = session.createQuery("FROM Client").list();
+        showNew = false;
         session.close();
 
         authorMap = new HashMap<>();
@@ -73,6 +74,16 @@ public class Authors implements Serializable{
         }
     }
 
+    public void newAuthor() {
+        if (newAuthor == null) {
+            newAuthor = new Author();
+            showNew = true;
+        } else {
+            newAuthor = null;
+            showNew = !showNew;
+        }
+    }
+
     public void addAuthor() {
         if (!newAuthor.getName().isEmpty()) {
             try {
@@ -80,38 +91,34 @@ public class Authors implements Serializable{
                 session.beginTransaction();
                 session.save(newAuthor);
                 session.getTransaction().commit();
-                refreshAuthors();
                 session.close();
+                newAuthor = null;
+                showNew = false;
             } catch (HibernateException ex) {
                 ex.printStackTrace();
-                System.out.println(ex);
             }
-        } else {
-            System.out.println("missing data");
+            refreshAuthors();
         }
     }
-    
-    public String updateAuthor(Author a){
+
+    public String updateAuthor(Author a) {
         selected = a;
         return "editAuthor";
     }
 
     public String saveAuthor() {
-        
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             session.update(selected);
             session.getTransaction().commit();
-            refreshAuthors();
             session.close();
         } catch (HibernateException ex) {
             ex.printStackTrace();
         }
+        refreshAuthors();
         return "editAuthorToAdmin";
     }
-
- 
 
     public void deleteAuthor(Author a) {
         try {
@@ -119,11 +126,11 @@ public class Authors implements Serializable{
             session.beginTransaction();
             session.delete(a);
             session.getTransaction().commit();
-            refreshAuthors();
             session.close();
         } catch (HibernateException ex) {
             ex.printStackTrace();
         }
+        authors.remove(a);
     }
 
     public Author getAuthor() {
@@ -188,6 +195,14 @@ public class Authors implements Serializable{
 
     public void setSelected(Author selected) {
         this.selected = selected;
+    }
+
+    public boolean isShowNew() {
+        return showNew;
+    }
+
+    public void setShowNew(boolean showNew) {
+        this.showNew = showNew;
     }
 
 }

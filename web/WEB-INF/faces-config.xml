@@ -76,6 +76,10 @@
             <from-outcome>backAdminCtoIndex</from-outcome>
             <to-view-id>/index.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>editClient</from-outcome>
+            <to-view-id>/editClient.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/clients.xhtml</from-view-id>
@@ -103,6 +107,13 @@
         <navigation-case>
             <from-outcome>editAuthorToAdmin</from-outcome>
             <to-view-id>/adminAuthors.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/editClient.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>editClientToAdmin</from-outcome>
+            <to-view-id>/adminClients.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>

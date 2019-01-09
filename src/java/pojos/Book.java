@@ -65,7 +65,7 @@ public class Book  implements java.io.Serializable {
         this.author = author;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="clientId", nullable=false)
     public Client getClient() {
         return this.client;

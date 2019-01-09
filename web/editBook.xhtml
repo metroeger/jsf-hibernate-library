@@ -7,17 +7,16 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-          <h:form>
-              <h:selectOneMenu value="#{listing.choosenAuthor}">
-                  <f:selectItems value="#{listing.authors}" />
-            </h:selectOneMenu>
-              <h:commandButton value="Choose" action="#{listing.chooseAuthor()}"/><br/> 
-              
-        </h:form>
+
         <h:form>
             Book title <h:inputText value="#{listing.choosenBook.title}"></h:inputText>
+            <h:selectOneMenu value="#{listing.choosenClient}">
+                  <f:selectItems value="#{listing.clients}" />
+            </h:selectOneMenu>
             <h:commandButton value="Save" action="#{listing.saveBook()}"/>
             <h:commandButton value="Cancel" action="editBookToAdmin" immediate="true"/>
+            
+            #{listing.choosenBook.client.name}
         </h:form>
         
     </h:body>
