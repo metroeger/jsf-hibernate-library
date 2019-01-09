@@ -13,8 +13,8 @@
                             action = "#{clients.makeNew()}"/> 
         </h:form>
          
-        <h:form>
-             Client name:<h:inputText value="#{clients.newClient}"></h:inputText>
+        <h:form rendered="#{clients.newC}">
+             Client name:<h:inputText value="#{clients.newClient.name}"></h:inputText>
              Email:<h:inputText value="#{clients.newClient.email}"></h:inputText>
              <h:commandButton value="Add client" action="#{clients.addClient()}"/>
          </h:form>

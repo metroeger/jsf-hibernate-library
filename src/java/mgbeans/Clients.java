@@ -27,7 +27,7 @@ import pojos.Client;
  */
 @ManagedBean
 @SessionScoped
-public class Clients implements Serializable {
+public class Clients {
 
     private Client client;
     private List<Client> clients;
@@ -37,27 +37,31 @@ public class Clients implements Serializable {
     private List<Author> authors;
     private Client newClient;
     private Client selected;
+    private boolean newC;
+    private boolean correctEmail;
 
-    public Clients () {
+    public Clients() {
         Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
         clients = session.createQuery("FROM Client").list();
         session.close();
+        
+        newC = false;
         
         clientMap = new HashMap<>();
         for (Client c : clients) {
             clientMap.put(c.getName(), c);
         }
     }
-  
-    public void refresh(){
-       Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
-       clients = session.createQuery("FROM Client").list(); 
-       session.close();
+
+    public void refresh() {
+        Session session = hibernate.HibernateUtil.getSessionFactory().openSession();
+        clients = session.createQuery("FROM Client").list();
+        session.close();
     }
-    
-    public void chooseClient(){
-      client = clientMap.get(choosenClient);
-      books = new ArrayList<>(client.getBooks());
+
+    public void chooseClient() {
+        client = clientMap.get(choosenClient);
+        books = new ArrayList<>(client.getBooks());
     }
 
 //    public void booksListOfClient(Client c) {       
@@ -67,36 +71,40 @@ public class Clients implements Serializable {
 //        books = q.list();
 //        session.close();
 //    }
-
-    public void makeNew(){
-        newClient=new Client();
+    public void makeNew() {
+        newClient = new Client();
+        newC = !newC;
+        correctEmail = true;
     }
-    
+
     public void addClient() {
-        Session session;
         if (!newClient.getName().isEmpty()) {
+            if(!newClient.getEmail().contains("@")){
+               correctEmail=false;              
+            }
             try {
+                Session session;
                 session = HibernateUtil.getSessionFactory().openSession();
                 session.beginTransaction();
                 session.save(newClient);
                 session.getTransaction().commit();
                 refresh();
-                session.close();
-                newClient=null;
+                session.close();              
             } catch (HibernateException ex) {
                 ex.printStackTrace();
                 System.out.println(ex);
             }
-        } 
-        
+        }
+        newClient = null;
+        newC=!newC;
     }
 
-    public String updateClient(Client c) {          
+    public String updateClient(Client c) {
         selected = c;
         return "editClient";
     }
-    
-      public String saveClient() {
+
+    public String saveClient() {
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
@@ -111,7 +119,6 @@ public class Clients implements Serializable {
         return "editClientToAdmin";
     }
 
-
     public void deleteClient(Client c) {
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
@@ -122,8 +129,8 @@ public class Clients implements Serializable {
             session.close();
         } catch (HibernateException ex) {
             ex.printStackTrace();
-        }  
-        
+        }
+
     }
 
     public Client getClient() {
@@ -182,5 +189,20 @@ public class Clients implements Serializable {
         this.selected = selected;
     }
 
-  
+    public boolean isNewC() {
+        return newC;
+    }
+
+    public void setNewC(boolean newC) {
+        this.newC = newC;
+    }
+
+    public boolean isCorrectEmail() {
+        return correctEmail;
+    }
+
+    public void setCorrectEmail(boolean correctEmail) {
+        this.correctEmail = correctEmail;
+    }
+
 }
